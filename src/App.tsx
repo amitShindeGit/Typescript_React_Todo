@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Todos from './components/Todos';
+import Todo from './models/todo';
+import NewTodo from './components/NewTodo';
+
+// const arr =  ["Fried chicken", "Gravyy Chicken"]
 
 function App() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  const addTodoHandler = (todoText: string) => {
+    const newTodo = new Todo(todoText);
+
+    setTodos((prevTodo) => {
+      return prevTodo.concat(newTodo);
+    });
+  }
+
+  const deleteHandler = (todoId: string) => {
+    setTodos((prevTodo) => {
+      return prevTodo.filter(todo => todo.id !== todoId);
+    });
+  };
+
+  // const todo = [
+  //   new Todo("Fried chicken"),
+  //   new Todo("Gravyy Chicken")
+  // ];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+    <Todos items={todos} deleteHandler={deleteHandler} />
+    <NewTodo onAddTodo={addTodoHandler} />
+    </React.Fragment>
   );
 }
 
